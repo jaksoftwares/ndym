@@ -3,8 +3,8 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import Logo from "@/components/ui/Logo";
-import { Button } from "@/components/ui/Button";
+import Logo from "@/components/ui/logo";
+import { Button } from "@/components/ui/button";
 import { Menu, X, ChevronRight, User, LogOut, LayoutDashboard } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";

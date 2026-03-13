@@ -1,6 +1,6 @@
 // Home page
 import Link from "next/link";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle2, Users, Calendar, Shield } from "lucide-react";
 
 export default function Home() {

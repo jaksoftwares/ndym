@@ -1,7 +1,7 @@
 import React from "react";
 
-import YouthTable from "@/components/admin/YouthTable";
-import { Button } from "@/components/ui/Button";
+import YouthTable from "@/components/admin/youth-table";
+import { Button } from "@/components/ui/button";
 import { Plus, Download, FileSpreadsheet } from "lucide-react";
 
 export default function YouthManagementPage() {

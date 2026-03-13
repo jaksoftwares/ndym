@@ -1,8 +1,8 @@
 import React from "react";
 
-import StatsCards from "@/components/admin/StatsCards";
-import YouthTable from "@/components/admin/YouthTable";
-import { Button } from "@/components/ui/Button";
+import StatsCards from "@/components/admin/stats-cards";
+import YouthTable from "@/components/admin/youth-table";
+import { Button } from "@/components/ui/button";
 import { Plus, Download } from "lucide-react";
 
 export default function DashboardPage() {

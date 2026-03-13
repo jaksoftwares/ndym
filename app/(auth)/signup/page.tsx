@@ -3,11 +3,11 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import Logo from "@/components/ui/Logo";
-import FormError from "@/components/ui/FormError";
+import Logo from "@/components/ui/logo";
+import FormError from "@/components/ui/form-error";
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 

@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Card, CardContent, CardDescription } from "@/components/ui/card";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 import { Plus, Shield, Mail, UserCircle, Edit2, ShieldAlert } from "lucide-react";
 import { cn } from "@/lib/utils";
 

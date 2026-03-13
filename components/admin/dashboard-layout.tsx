@@ -15,9 +15,9 @@ import {
   ChevronRight,
   UserCircle
 } from "lucide-react";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import Logo from "@/components/ui/Logo";
+import Logo from "@/components/ui/logo";
 import { motion, AnimatePresence } from "framer-motion";
 
 const sidebarLinks = [
