@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/Card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/Button";
 import { Plus, Church, MapPin, ChevronRight, Edit2, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";

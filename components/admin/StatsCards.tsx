@@ -7,7 +7,7 @@ import {
   ArrowUpRight,
   ArrowDownRight
 } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/Card";
+import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
 const stats = [
