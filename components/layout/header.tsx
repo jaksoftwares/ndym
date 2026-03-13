@@ -2,12 +2,14 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Logo from "@/components/ui/Logo";
 import { Button } from "@/components/ui/Button";
-import { Menu, X, ChevronRight } from "lucide-react";
+import { Menu, X, ChevronRight, User, LogOut, LayoutDashboard } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
+import { supabase } from "@/lib/supabase/client";
+import { User as SupabaseUser } from "@supabase/supabase-js";
 
 const navLinks = [
   { name: "Home", href: "/" },
@@ -19,18 +21,41 @@ const navLinks = [
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [user, setUser] = useState<SupabaseUser | null>(null);
+  const [loading, setLoading] = useState(true);
   const pathname = usePathname();
-
-  // Mock authentication state (would be replaced with Supabase auth)
-  const isLoggedIn = true; // For demonstration as per user request
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
     };
+
+    const getInitialUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+      setLoading(false);
+    };
+
+    getInitialUser();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+      setLoading(false);
+    });
+
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      subscription.unsubscribe();
+    };
   }, []);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.push("/");
+    router.refresh();
+  };
 
   return (
     <header
@@ -46,36 +71,59 @@ export default function Header() {
 
         {/* Desktop Navigation */}
         <nav className="hidden lg:flex items-center space-x-8">
-          {isLoggedIn &&
-            navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  "text-sm font-medium transition-colors hover:text-primary",
-                  pathname === link.href ? "text-primary border-b-2 border-primary" : "text-muted-foreground"
-                )}
-              >
-                {link.name}
-              </Link>
-            ))}
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={cn(
+                "text-sm font-medium transition-colors hover:text-primary",
+                pathname === link.href ? "text-primary border-b-2 border-primary" : "text-muted-foreground"
+              )}
+            >
+              {link.name}
+            </Link>
+          ))}
+          {user && (
+            <Link
+              href="/admin"
+              className={cn(
+                "text-sm font-medium transition-colors hover:text-primary flex items-center gap-1",
+                pathname.startsWith("/admin") ? "text-primary border-b-2 border-primary" : "text-muted-foreground"
+              )}
+            >
+              <LayoutDashboard size={16} />
+              Dashboard
+            </Link>
+          )}
         </nav>
 
         <div className="flex items-center space-x-4">
-          {!isLoggedIn ? (
+          {!loading && (
             <>
-              <Link href="/login" className="hidden sm:block">
-                <Button variant="ghost">Login</Button>
-              </Link>
-              <Link href="/register">
-                <Button variant="primary">Get Started</Button>
-              </Link>
+              {!user ? (
+                <>
+                  <Link href="/login" className="hidden sm:block">
+                    <Button variant="ghost">Login</Button>
+                  </Link>
+                  <Link href="/signup">
+                    <Button variant="primary">Get Started</Button>
+                  </Link>
+                </>
+              ) : (
+                <div className="hidden sm:flex items-center space-x-4">
+                  <div className="flex items-center space-x-2 text-sm font-medium text-foreground">
+                    <div className="bg-primary/10 p-1.5 rounded-full">
+                      <User size={16} className="text-primary" />
+                    </div>
+                    <span>{user.email?.split('@')[0]}</span>
+                  </div>
+                  <Button variant="outline" size="sm" onClick={handleLogout} className="gap-2">
+                    <LogOut size={16} />
+                    Logout
+                  </Button>
+                </div>
+              )}
             </>
-          ) : (
-            <div className="hidden sm:flex items-center space-x-4">
-              <span className="text-sm font-medium text-muted-foreground">Welcome, Member</span>
-              <Button variant="outline" size="sm">Logout</Button>
-            </div>
           )}
 
           {/* Mobile Menu Toggle */}
@@ -99,33 +147,62 @@ export default function Header() {
             className="lg:hidden bg-white border-b overflow-hidden"
           >
             <div className="container mx-auto px-4 py-6 flex flex-col space-y-4">
-              {isLoggedIn ? (
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={cn(
+                    "flex items-center justify-between py-2 text-lg font-medium",
+                    pathname === link.href ? "text-primary" : "text-foreground"
+                  )}
+                >
+                  {link.name}
+                  <ChevronRight size={18} className="text-muted-foreground" />
+                </Link>
+              ))}
+              
+              {user && (
+                <Link
+                  href="/admin"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={cn(
+                    "flex items-center justify-between py-2 text-lg font-medium",
+                    pathname.startsWith("/admin") ? "text-primary" : "text-foreground"
+                  )}
+                >
+                  Dashboard
+                  <ChevronRight size={18} className="text-muted-foreground" />
+                </Link>
+              )}
+
+              <hr className="my-2" />
+
+              {!loading && (
                 <>
-                  {navLinks.map((link) => (
-                    <Link
-                      key={link.href}
-                      href={link.href}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className={cn(
-                        "flex items-center justify-between py-2 text-lg font-medium",
-                        pathname === link.href ? "text-primary" : "text-foreground"
-                      )}
-                    >
-                      {link.name}
-                      <ChevronRight size={18} className="text-muted-foreground" />
-                    </Link>
-                  ))}
-                  <hr className="my-2" />
-                  <Button variant="outline" className="w-full justify-center">Logout</Button>
-                </>
-              ) : (
-                <>
-                  <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
-                    <Button variant="ghost" className="w-full justify-center">Login</Button>
-                  </Link>
-                  <Link href="/register" onClick={() => setMobileMenuOpen(false)}>
-                    <Button variant="primary" className="w-full justify-center">Register</Button>
-                  </Link>
+                  {!user ? (
+                    <div className="grid grid-cols-2 gap-4">
+                      <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
+                        <Button variant="ghost" className="w-full">Login</Button>
+                      </Link>
+                      <Link href="/register" onClick={() => setMobileMenuOpen(false)}>
+                        <Button variant="primary" className="w-full">Register</Button>
+                      </Link>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col space-y-4">
+                      <div className="flex items-center space-x-3 px-1">
+                        <div className="bg-primary/10 p-2 rounded-full">
+                          <User size={20} className="text-primary" />
+                        </div>
+                        <span className="font-medium">{user.email}</span>
+                      </div>
+                      <Button variant="outline" className="w-full justify-center gap-2" onClick={handleLogout}>
+                        <LogOut size={18} />
+                        Sign Out
+                      </Button>
+                    </div>
+                  )}
                 </>
               )}
             </div>
@@ -135,3 +212,4 @@ export default function Header() {
     </header>
   );
 }
+

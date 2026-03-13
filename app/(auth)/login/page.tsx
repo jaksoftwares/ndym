@@ -2,28 +2,45 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import Logo from "@/components/ui/Logo";
 import FormError from "@/components/ui/FormError";
 import { motion } from "framer-motion";
+import { supabase } from "@/lib/supabase/client";
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | undefined>("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
 
-    // Simulate login API call
-    setTimeout(() => {
+    try {
+      const { error: loginError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (loginError) {
+        setError(loginError.message);
+        setIsLoading(false);
+        return;
+      }
+
+      router.push("/admin");
+      router.refresh();
+    } catch (err: any) {
+      setError("An unexpected error occurred. Please try again.");
       setIsLoading(false);
-      // For demo purposes, we'll just show an error if it's the 1st attempt or something
-      // setError("Invalid email or password");
-    }, 2000);
+    }
   };
 
   return (
@@ -49,15 +66,19 @@ export default function LoginPage() {
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <Input
-                label="Email or Username"
-                type="text"
+                label="Email"
+                type="email"
                 placeholder="you@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
               />
               <Input
                 label="Password"
                 type="password"
                 placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 required
                 showPasswordToggle
               />
@@ -105,3 +126,4 @@ export default function LoginPage() {
     </div>
   );
 }
+
