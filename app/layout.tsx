@@ -1,15 +1,18 @@
 import type { Metadata } from "next";
-import { Inter, Montserrat, Geist } from "next/font/google";
+import { Montserrat, Geist } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { cn } from "@/lib/utils";
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+const geist = Geist({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
 
 const montserrat = Montserrat({
-  variable: "--font-heading",
   subsets: ["latin"],
+  variable: "--font-heading",
 });
 
 export const metadata: Metadata = {
@@ -23,15 +26,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={cn("font-sans", geist.variable)}>
+    <html lang="en" className={cn("scroll-smooth", geist.variable, montserrat.variable)}>
       <body
-        className={`${geist.variable} ${montserrat.variable} font-sans antialiased flex flex-col min-h-screen`}
+        className={cn(
+          "min-h-screen bg-background font-sans antialiased flex flex-col",
+          geist.variable,
+          montserrat.variable
+        )}
       >
-        <Header />
-        <main className="flex-grow">
-          {children}
-        </main>
-        <Footer />
+        {children}
       </body>
     </html>
   );

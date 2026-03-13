@@ -4,17 +4,16 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Logo from "@/components/ui/Logo";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 import { Menu, X, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 
 const navLinks = [
-  { name: "Dashboard", href: "/dashboard" },
-  { name: "Youth", href: "/youth" },
-  { name: "Churches", href: "/churches" },
-  { name: "Parishes", href: "/parishes" },
-  { name: "Admins", href: "/admins" },
+  { name: "Home", href: "/" },
+  { name: "About", href: "/about" },
+  { name: "Events", href: "/events" },
+  { name: "Contact", href: "/contact" },
 ];
 
 export default function Header() {
@@ -54,7 +53,7 @@ export default function Header() {
                 href={link.href}
                 className={cn(
                   "text-sm font-medium transition-colors hover:text-primary",
-                  pathname === link.href ? "text-primary border-b-2 border-primary" : "text-muted"
+                  pathname === link.href ? "text-primary border-b-2 border-primary" : "text-muted-foreground"
                 )}
               >
                 {link.name}
@@ -74,7 +73,7 @@ export default function Header() {
             </>
           ) : (
             <div className="hidden sm:flex items-center space-x-4">
-              <span className="text-sm font-medium text-muted">Welcome, Member</span>
+              <span className="text-sm font-medium text-muted-foreground">Welcome, Member</span>
               <Button variant="outline" size="sm">Logout</Button>
             </div>
           )}
@@ -113,7 +112,7 @@ export default function Header() {
                       )}
                     >
                       {link.name}
-                      <ChevronRight size={18} className="text-muted" />
+                      <ChevronRight size={18} className="text-muted-foreground" />
                     </Link>
                   ))}
                   <hr className="my-2" />

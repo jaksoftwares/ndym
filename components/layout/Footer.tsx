@@ -10,7 +10,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="md:col-span-2">
             <Logo width={160} height={50} className="mb-4" />
-            <p className="text-muted text-sm max-w-sm">
+            <p className="text-muted-foreground text-sm max-w-sm">
               Supporting the Anglican Church of Kenya, Nairobi Diocese Youth Ministry (NDYM)
               in raising a godly generation through faith, community, and service.
             </p>
@@ -18,7 +18,7 @@ export default function Footer() {
           
           <div>
             <h4 className="font-heading font-semibold text-foreground mb-4">Quick Links</h4>
-            <ul className="space-y-2 text-sm text-muted">
+            <ul className="space-y-2 text-sm text-muted-foreground">
               <li><Link href="/" className="hover:text-primary transition-colors">Home</Link></li>
               <li><Link href="/about" className="hover:text-primary transition-colors">About Us</Link></li>
               <li><Link href="/events" className="hover:text-primary transition-colors">Events</Link></li>
@@ -28,7 +28,7 @@ export default function Footer() {
           
           <div>
             <h4 className="font-heading font-semibold text-foreground mb-4">Support</h4>
-            <ul className="space-y-2 text-sm text-muted">
+            <ul className="space-y-2 text-sm text-muted-foreground">
               <li><Link href="/privacy" className="hover:text-primary transition-colors">Privacy Policy</Link></li>
               <li><Link href="/terms" className="hover:text-primary transition-colors">Terms of Service</Link></li>
               <li><Link href="/faq" className="hover:text-primary transition-colors">FAQ</Link></li>
@@ -36,7 +36,7 @@ export default function Footer() {
           </div>
         </div>
         
-        <div className="border-t mt-12 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-muted">
+        <div className="border-t mt-12 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-muted-foreground">
           <p>© {currentYear} Nairobi Diocese Youth Ministry. All rights reserved.</p>
           <p className="mt-2 md:mt-0 font-medium">Anglican Church of Kenya</p>
         </div>
